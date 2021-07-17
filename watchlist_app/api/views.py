@@ -4,13 +4,20 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 
-from watchlist_app.models import WatchList, StreamPlatform, ReviewList
-from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewListSerializer
+from watchlist_app.models import WatchList, StreamPlatform, Review
+from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
+
+class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
 
 class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = ReviewList.objects.all()
-    serializer_class = ReviewListSerializer
-    
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer    
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

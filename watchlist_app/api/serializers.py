@@ -1,25 +1,28 @@
 from rest_framework import serializers
-from watchlist_app.models import StreamPlatform, WatchList, ReviewList
+from watchlist_app.models import StreamPlatform, WatchList, Review
+
+class ReviewSerializer(serializers.ModelSerializer):
+        
+    class Meta:
+        model = Review
+        fields = '__all__'
+
 
 class WatchListSerializer(serializers.ModelSerializer):
-    
+    review = ReviewSerializer(many=True, read_only=True) # read only as the review can only be added from the serializer above
+
     class Meta:
         model = WatchList
         fields = '__all__'
 
-
+# streaming platform can have many movies
 class StreamPlatformSerializer(serializers.ModelSerializer):
-    watchlist = WatchListSerializer(many=True, read_only=True)
+    watchlist = WatchListSerializer(many=True, read_only=True) #should be the same as the related_name in models
     
     class Meta:
         model = StreamPlatform
         fields = '__all__'
 
-class ReviewListSerializer(serializers.ModelSerializer):
-        
-    class Meta:
-        model = ReviewList
-        fields = '__all__'
 
 
 
